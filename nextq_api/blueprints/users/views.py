@@ -7,7 +7,7 @@ users_api_blueprint = Blueprint('users_api',
                              template_folder='templates')
 
 @users_api_blueprint.route('/new', methods=['POST'])
-def new_user():
+def create():
     params = request.json
     new_user = User(
         username = params.get("username"), 
