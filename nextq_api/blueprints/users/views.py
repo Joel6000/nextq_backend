@@ -2,11 +2,11 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from models.user import User
 
-nextq_api_blueprint = Blueprint('nextq_api',
+users_api_blueprint = Blueprint('users_api',
                              __name__,
                              template_folder='templates')
 
-@nextq_api_blueprint.route('/new', methods=['POST'])
+@users_api_blueprint.route('/new', methods=['POST'])
 def new_user():
     params = request.json
     new_user = User(
@@ -22,7 +22,7 @@ def new_user():
     else:
         return jsonify([err for err in new_user.errors])
 
-@nextq_api_blueprint.route('/<user_id>', methods=['GET'])
+@users_api_blueprint.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.get_or_none(user.id == user_id)
 
@@ -32,7 +32,7 @@ def get_user(user_id):
     else:
         return jsonify([err for err in new_user.errors])
 
-@nextq_api_blueprint.route('/<user_id>/checkin', methods=['POST'])
+@users_api_blueprint.route('/<user_id>/checkin', methods=['POST'])
 def user_checkin(user_id):
     user = User.get_or_none(user.id == user_id)
 
