@@ -31,20 +31,5 @@ def migrate():
 def index():
     return render_template('index.html')
 
-#SHOP API DRAFT
-@app.route('/shop/new', methods=['POST'])
-def new_shop():
-    params = request.json
-    new_shop = Shop(
-        name = params.get("name"), 
-        limit=params.get("limit")
-        )
-
-    if new_shop.save():
-        token = create_access_token(identity = new_shop.id) #somehting else here
-        return jsonify({"token":token})
-    else:
-        return jsonify([err for err in new_shop.errors])
-
 if __name__ == '__main__': # Revisit previous challenge if you're uncertain what this does https://code.nextacademy.com/lessons/name-main/424
    app.run()
