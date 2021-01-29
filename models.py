@@ -3,9 +3,6 @@ import peewee as pw
 import datetime
 from playhouse.postgres_ext import PostgresqlExtDatabase
 
-
-contacts_db = SqliteDatabase('contacts.db')
-
 db = PostgresqlExtDatabase(os.getenv('DATABASE'))
 
 class Base(pw.Model):
