@@ -2,8 +2,6 @@ from models.base_model import BaseModel
 import peewee as pw
 import re
 from werkzeug.security import generate_password_hash
-from flask_login import UserMixin
-from playhouse.hybrid import hybrid_property
 
 class User(BaseModel):
     name = pw.CharField(unique = False, null = False)
@@ -16,10 +14,6 @@ class User(BaseModel):
         existing_user_email = User.get_or_none(User.email == self.email)
         if existing_user_email and existing_user_email.id != self.id:
             self.errors.append(f"User with {self.email} already exists")
-
-        existing_user_username = User.get_or_none(User.username == self.username)
-        if existing_user_username and existing_user_username.id != self.id:
-            self.errors.append(f"User with {self.username} already exists.")
 
         #Passwords
         if self.password:
