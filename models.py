@@ -20,7 +20,7 @@ class BaseModel(pw.Model):
 
 class User(BaseModel):
     name = pw.CharField()
-    mobile = pw.IntegerField(unique=True)
+    mobile = pw.CharField(unique=True)
 
 class Store(BaseModel):
     name = pw.CharField()
