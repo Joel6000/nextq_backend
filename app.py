@@ -23,10 +23,6 @@ def after_request(response):
     db.close()
     return response
 
-@app.cli.command()
-def migrate():
-   db.evolve(ignore_tables={'base_model'})
-
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
     return render_template('index.html')

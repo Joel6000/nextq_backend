@@ -12,7 +12,7 @@ class Base(pw.Model):
     
     def save(self, *args, **kwargs):
         self.updated_at = datetime.datetime.now()
-        return super(BaseModel, self).save(*args, *kwargs)
+        return super(Base, self).save(*args, *kwargs)
 
     class Meta:
         database = db
@@ -22,7 +22,7 @@ class Base(pw.Model):
 class User(Base):
     name = pw.CharField()
     age = pw.IntegerField()
-    mobile = pw.IntegerField(unique=True)
+    mobile = pw.CharField(unique=True)
 
 class Store(Base):
     name = pw.CharField()
@@ -39,3 +39,4 @@ class Queue(Base):
     user = pw.ForeignKeyField(User)
     store = pw.ForeignKeyField(Store)
     queue_time = pw.DateTimeField(default=datetime.datetime.now)
+
