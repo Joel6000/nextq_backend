@@ -5,7 +5,7 @@ from playhouse.postgres_ext import PostgresqlExtDatabase
 
 db = PostgresqlExtDatabase(os.getenv('DATABASE'))
 
-class Base(pw.Model):
+class BaseModel(pw.Model):
     created_at = pw.DateTimeField(default=datetime.datetime.now)
     updated_at = pw.DateTimeField(default=datetime.datetime.now)
     
@@ -18,22 +18,22 @@ class Base(pw.Model):
         legacy_table_names = False
 
 
-class User(Base):
+class User(BaseModel):
     name = pw.CharField()
     mobile = pw.IntegerField(unique=True)
 
-class Store(Base):
+class Store(BaseModel):
     name = pw.CharField()
     location = pw.CharField()
     customer_limit = pw.IntegerField(null=True)
 
-class History(Base):
+class History(BaseModel):
     user = pw.ForeignKeyField(User)
     store = pw.ForeignKeyField(Store)
     time_in = pw.DateTimeField(default=datetime.datetime.now)
     time_out = pw.DateTimeField(default=None)
 
-class Queue(Base):
+class Queue(BaseModel):
     user = pw.ForeignKeyField(User)
     store = pw.ForeignKeyField(Store)
     queue_time = pw.DateTimeField(default=datetime.datetime.now)
