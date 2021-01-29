@@ -8,7 +8,7 @@ stores_api_blueprint = Blueprint('stores_api',
 
 #SHOP API DRAFT
 @stores_api_blueprint.route('/new', methods=['POST'])
-def new_shop():
+def new_store():
     params = request.json
     new_store = Store(
         name = params.get("name"), 
