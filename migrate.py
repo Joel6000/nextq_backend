@@ -14,7 +14,7 @@ from models import db
 
 print("Running Migration")
 if os.getenv('FLASK_ENV') == 'production':
-    db.evolve(ignore_tables={'base_model'}, interactive=False)
+    db.evolve(ignore_tables={'base'}, interactive=False)
 else:
-    db.evolve(ignore_tables={'base_model'})
+    db.evolve(ignore_tables={'base'})
 print("Finish Migration")
