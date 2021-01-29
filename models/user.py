@@ -1,10 +1,9 @@
-import os
+from models.base_model import BaseModel
 import peewee as pw
-import datetime
+import re
 from werkzeug.security import generate_password_hash
-from playhouse.postgres_ext import PostgresqlExtDatabase
-
-db = PostgresqlExtDatabase(os.getenv('DATABASE'))
+from flask_login import UserMixin
+from playhouse.hybrid import hybrid_property
 
 class User(BaseModel):
     name = pw.CharField(unique = False, null = False)
@@ -35,20 +34,3 @@ class User(BaseModel):
                 self.password_hash = generate_password_hash(self.password)
             else:
                 self.errors.append(f"Password requires changes")
-
-
-class Store(BaseModel):
-    name = pw.CharField()
-    location = pw.CharField()
-    customer_limit = pw.IntegerField(null=True)
-
-class History(BaseModel):
-    user = pw.ForeignKeyField(User)
-    store = pw.ForeignKeyField(Store)
-    time_in = pw.DateTimeField(default=datetime.datetime.now)
-    time_out = pw.DateTimeField(default=None)
-
-class Queue(BaseModel):
-    user = pw.ForeignKeyField(User)
-    store = pw.ForeignKeyField(Store)
-    queue_time = pw.DateTimeField(default=datetime.datetime.now)

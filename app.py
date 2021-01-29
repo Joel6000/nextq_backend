@@ -3,8 +3,6 @@ import peeweedbevolve
 import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
 from flask_jwt_extended import create_access_token
-from models import db
-from models import *
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
@@ -22,10 +20,6 @@ def before_request():
 def after_request(response):
     db.close()
     return response
-
-@app.cli.command()
-def migrate():
-   db.evolve(ignore_tables={'base_model'})
 
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
