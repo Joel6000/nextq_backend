@@ -25,7 +25,7 @@ def after_request(response):
 
 @app.cli.command()
 def migrate():
-   db.evolve(ignore_tables={'base_model'})
+   db.evolve(ignore_tables={'base'})
 
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
