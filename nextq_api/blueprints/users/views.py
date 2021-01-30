@@ -13,7 +13,7 @@ def create():
         username = params.get("username"), 
         email=params.get("email"), 
         password=params.get("password"),
-        mobile_number=params.get("mobilehp")
+        mobile=params.get("mobilehp")
         )
 
     if new_user.save():
