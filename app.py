@@ -3,6 +3,7 @@ import peeweedbevolve
 import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
 from flask_jwt_extended import create_access_token
+from database import db
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")

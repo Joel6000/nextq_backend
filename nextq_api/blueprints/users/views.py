@@ -10,7 +10,7 @@ users_api_blueprint = Blueprint('users_api',
 def create():
     params = request.json
     new_user = User(
-        username = params.get("username"), 
+        name = params.get("username"), 
         email=params.get("email"), 
         password=params.get("password"),
         mobile=params.get("mobilehp")
