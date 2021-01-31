@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
-from models import Store
+from models.store import Store
 
 stores_api_blueprint = Blueprint('stores_api',
                              __name__,

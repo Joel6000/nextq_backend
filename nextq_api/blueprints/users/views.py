@@ -1,19 +1,19 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
-from models import User
+from models.user import User
 
 users_api_blueprint = Blueprint('users_api',
                              __name__,
                              template_folder='templates')
 
-@users_api_blueprint.route('/', methods=['POST'])
+@users_api_blueprint.route('', methods=['POST'])
 def create():
     params = request.json
     new_user = User(
-        name = params.get("username"), 
+        name = params.get("name"), 
         email=params.get("email"), 
         password=params.get("password"),
-        mobile=params.get("mobilehp")
+        mobile=params.get("mobile")
         )
 
     if new_user.save():

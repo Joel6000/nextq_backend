@@ -2,11 +2,13 @@ import os
 import peeweedbevolve
 import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import JWTManager
 from database import db
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
+jwt = JWTManager(app)
+
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")
