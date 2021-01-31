@@ -14,9 +14,8 @@ history_api_blueprint = Blueprint('history_api',
 def create():
     params = request.json
     new_history = History(
-        name = params.get("name"),
-        location = params.get("location"), 
-        customer_limit=params.get("limit")
+        user = params.get("name"),
+        store = params.get("location"), 
         )
 
     if new_history.save():
