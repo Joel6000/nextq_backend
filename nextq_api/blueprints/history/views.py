@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from models.history import History
-from modesl.user import User
+from models.user import User
 from models.store import Store
 
 history_api_blueprint = Blueprint('history_api',
