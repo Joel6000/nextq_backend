@@ -24,8 +24,7 @@ def create():
 
 @users_api_blueprint.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
-    user = User.get_or_none(user.id == user_id)
-
+    user = User.get_or_none(User.id == user_id)
     if user:
         token = create_access_token(identity = user.id)
         return jsonify({"token":token})
