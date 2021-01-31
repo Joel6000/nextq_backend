@@ -11,7 +11,8 @@ stores_api_blueprint = Blueprint('stores_api',
 def new_store():
     params = request.json
     new_store = Store(
-        name = params.get("name"), 
+        name = params.get("name"),
+        location = params.get("location"), 
         customer_limit=params.get("limit")
         )
 
