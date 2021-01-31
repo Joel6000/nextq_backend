@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required
 from models.user import User
 
 users_api_blueprint = Blueprint('users_api',
@@ -32,6 +32,7 @@ def get_user(user_id):
         return jsonify([err for err in new_user.errors])
 
 @users_api_blueprint.route('/<user_id>/checkin', methods=['POST'])
+@jwt_required
 def user_checkin(user_id):
     user = User.get_or_none(user.id == user_id)
 
