@@ -10,11 +10,12 @@ if not os.getenv('FLASK_ENV') == 'production':
 
 import peeweedbevolve
 from models import *
-from models import db
+from models.base_model import db
 
 print("Running Migration")
 if os.getenv('FLASK_ENV') == 'production':
-    db.evolve(ignore_tables={'base'}, interactive=False)
+    db.evolve(ignore_tables={'base_model'}, interactive=False)
 else:
-    db.evolve(ignore_tables={'base'})
+    db.evolve(ignore_tables={'base_model'})
 print("Finish Migration")
+

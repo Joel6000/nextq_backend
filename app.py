@@ -1,13 +1,13 @@
 import os
-import peeweedbevolve
 import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
-from flask_jwt_extended import create_access_token
-from models import db
-from models import *
+from flask_jwt_extended import JWTManager
+from database import db
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
+jwt = JWTManager(app)
+
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")
@@ -26,6 +26,3 @@ def after_request(response):
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
     return render_template('index.html')
-
-if __name__ == '__main__': # Revisit previous challenge if you're uncertain what this does https://code.nextacademy.com/lessons/name-main/424
-   app.run()

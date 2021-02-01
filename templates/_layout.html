@@ -1,0 +1,21 @@
+</head>
+
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+ <div class="container">
+   {% block content %}
+   <h1>Testing Backend</h1>
+   {% endblock %}
+ </div>
+ 
+</body>
+</html>
