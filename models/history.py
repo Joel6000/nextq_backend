@@ -8,4 +8,4 @@ class History(BaseModel):
     user = pw.ForeignKeyField(User)
     store = pw.ForeignKeyField(Store)
     time_in = pw.DateTimeField(default=datetime.datetime.now)
-    time_out = pw.DateTimeField(default=None)
+    time_out = pw.DateTimeField(default=None, null=True)
