@@ -17,7 +17,6 @@ def new_store():
         )
 
     if new_store.save():
-        token = create_access_token(identity = new_store.id) #somehting else here
-        return jsonify({"token":token})
+        return jsonify({"name":new_store.name})
     else:
         return jsonify([err for err in new_store.errors])
