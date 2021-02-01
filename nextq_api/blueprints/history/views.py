@@ -16,6 +16,7 @@ def create(user_id, store_id):
     user= User.get_or_none(User.id == user_id)
     store = Store.get_or_none(Store.id == store_id)
     history = History.select().where(History.user_id == user.id, History.time_out == None )
+    
     if history.exists():
         return jsonify({"error":"User is not checked out from previous store."})
     else:
