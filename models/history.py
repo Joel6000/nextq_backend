@@ -5,7 +5,7 @@ import datetime
 import peewee as pw
 
 class History(BaseModel):
-    user = pw.ForeignKeyField(User)
-    store = pw.ForeignKeyField(Store)
+    user = pw.ForeignKeyField(User, on_delete="CASCADE")
+    store = pw.ForeignKeyField(Store, on_delete="CASCADE")
     time_in = pw.DateTimeField(default=datetime.datetime.now)
     time_out = pw.DateTimeField(default=None, null=True)
