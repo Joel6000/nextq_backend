@@ -21,3 +21,14 @@ def new_store():
         "storeLocation":new_store.location})
     else:
         return jsonify([err for err in new_store.errors])
+
+@stores_api_blueprint.route('/<store_id>/headcount', methods=['GET'])
+def get_headcount(store_id):
+    store = Store.get_by_id(store_id)
+
+    if store:
+        return jsonify({
+            "headcount":store.headcount
+        })
+    else:
+        return jsonify([err for err in new_store.errors])
