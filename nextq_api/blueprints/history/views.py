@@ -10,7 +10,7 @@ history_api_blueprint = Blueprint('history_api',
 
 
 
-@history_api_blueprint.route('/new', methods=['POST'])
+@history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
 def create():
     params = request.json
     new_history = History(
