@@ -17,7 +17,11 @@ def login():
         authorised = check_password_hash(user.password_hash,params.get('password'))
         if  authorised:
             access_token = create_access_token(identity = str(user.id))
-            return {'token': access_token}
+            return {
+                'token': access_token,
+                'name':user.name,
+                'mobile':user.mobile
+                }
         else:
             return {'error': 'Email or password invalid'}
     
