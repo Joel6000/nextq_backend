@@ -19,7 +19,7 @@ def create(user_id, store_id):
     )
 
     if new_history.save():
-        token = create_access_token(identity = new_history.id) #somehting else here
+        token = create_access_token(identity = new_history.id)
         return jsonify({"token":token})
     else:
         return jsonify([err for err in new_history.errors])
@@ -32,7 +32,7 @@ def update(user_id, store_id):
     print("before save")
     if history.save():
         print("after save")
-        token = create_access_token(identity = history.id) #somehting else here
+        token = create_access_token(identity = history.id) 
         return jsonify({"token":token})
     else:
         return jsonify([err for err in new_history.errors])
