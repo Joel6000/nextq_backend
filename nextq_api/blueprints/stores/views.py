@@ -11,12 +11,13 @@ stores_api_blueprint = Blueprint('stores_api',
 def new_store():
     params = request.json
     new_store = Store(
-        name = params.get("name"), 
-        customer_limit=params.get("limit")
+        name = params.get("name"),
+        location= params.get("location"),
+        customer_limit= params.get("limit"),
         )
 
     if new_store.save():
-        token = create_access_token(identity = new_store.id) #somehting else here
-        return jsonify({"token":token})
+        return jsonify({"storeName":new_store.name,
+        "storeLocation":new_store.location})
     else:
         return jsonify([err for err in new_store.errors])
