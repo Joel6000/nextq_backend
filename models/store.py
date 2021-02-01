@@ -6,3 +6,4 @@ class Store(BaseModel):
     name = pw.CharField()
     location = pw.CharField()
     customer_limit = pw.IntegerField(null=True)
+    headcount = pw.IntegerField(default = 0)

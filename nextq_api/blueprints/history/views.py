@@ -10,15 +10,18 @@ history_api_blueprint = Blueprint('history_api',
                              template_folder='templates')
 
 
-
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
 def create(user_id, store_id):
+    user= User.get_or_none(User.id == user_id)
+    store = Store.get_or_none(Store.id == store_id)
     new_history = History(
-        user = User.get_or_none(User.id == user_id),
-        store = Store.get_or_none(Store.id == store_id)
+        user = user,
+        store = store
     )
 
     if new_history.save():
+        store.headcount = store.headcount + 1
+        store.save()
         return jsonify({
             "user":new_history.user.name,
             "store":new_history.store.name
@@ -30,6 +33,7 @@ def create(user_id, store_id):
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
 @jwt_required
 def update(user_id, store_id):
+    store = Store.get_by_id(store_id)
     history = History.get_or_none(
         (History.user_id == user_id) & 
         (History.store_id == store_id) & 
@@ -39,6 +43,8 @@ def update(user_id, store_id):
     history.time_out = datetime.datetime.now()
     print("before save")
     if history.save():
+        store.headcount = store.headcount - 1
+        store.save()
         print("after save")
         return jsonify({
             "time_out":history.time_out,
