@@ -12,22 +12,27 @@ history_api_blueprint = Blueprint('history_api',
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
 def create(user_id, store_id):
+
     user= User.get_or_none(User.id == user_id)
     store = Store.get_or_none(Store.id == store_id)
-    new_history = History(
-        user = user,
-        store = store
-    )
-
-    if new_history.save():
-        store.headcount = store.headcount + 1
-        store.save()
-        return jsonify({
-            "user":new_history.user.name,
-            "store":new_history.store.name
-            })
+    history = History.select().where(History.user_id == user.id, History.time_out == None )
+    if history.exists():
+        return jsonify({"error":"User is not checked out from previous store."})
     else:
-        return jsonify([err for err in new_history.errors])
+        new_history = History(
+            user = user,
+            store = store
+        )
+
+        if new_history.save():
+            store.headcount = store.headcount + 1
+            store.save()
+            return jsonify({
+                "user":new_history.user.name,
+                "store":new_history.store.name
+                })
+        else:
+            return jsonify([err for err in new_history.errors])
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
