@@ -15,8 +15,8 @@ def create(user_id, store_id):
 
     user= User.get_or_none(User.id == user_id)
     store = Store.get_or_none(Store.id == store_id)
-    history = History.select().where(History.user_id == user.id, History.time_out == None )
-    
+    history = History.select().where(History.user_id == user.id, History.time_out == None ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
+
     if history.exists():
         return jsonify({"error":"User is not checked out from previous store."})
     else:
@@ -26,7 +26,7 @@ def create(user_id, store_id):
         )
 
         if new_history.save():
-            store.headcount = store.headcount + 1
+            store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
             store.save()
             return jsonify({
                 "user":new_history.user.name,
