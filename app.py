@@ -1,5 +1,4 @@
 import os
-import peeweedbevolve
 import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
 from flask_jwt_extended import JWTManager
