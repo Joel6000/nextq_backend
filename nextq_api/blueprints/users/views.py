@@ -35,13 +35,3 @@ def get_user(user_id):
             })
     else:
         return jsonify([err for err in new_user.errors])
-
-@users_api_blueprint.route('/<user_id>/checkin', methods=['POST'])
-@jwt_required
-def user_checkin(user_id):
-    user = User.get_or_none(user.id == user_id)
-
-    if user:
-        pass
-    else:
-        pass
