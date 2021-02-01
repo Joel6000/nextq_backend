@@ -17,8 +17,10 @@ def create():
         )
 
     if new_user.save():
-        token = create_access_token(identity = new_user.id)
-        return jsonify({"token":token})
+        return jsonify({
+            "name":new_user.name,
+            "mobile":new_user.mobile
+            })
     else:
         return jsonify([err for err in new_user.errors])
 
