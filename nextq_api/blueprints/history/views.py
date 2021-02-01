@@ -30,7 +30,12 @@ def create(user_id, store_id):
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
 @jwt_required
 def update(user_id, store_id):
-    history = History.get_or_none((History.user_id == user_id) & (History.store_id == store_id) & (History.time_out == None))
+    history = History.get_or_none(
+        (History.user_id == user_id) & 
+        (History.store_id == store_id) & 
+        (History.time_out == None)
+        )
+
     history.time_out = datetime.datetime.now()
     print("before save")
     if history.save():
