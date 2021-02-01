@@ -30,7 +30,8 @@ def create(user_id, store_id):
             store.save()
             return jsonify({
                 "user":new_history.user.name,
-                "store":new_history.store.name
+                "store":new_history.store.name,
+                "headcount":new_history.store.headcount
                 })
         else:
             return jsonify([err for err in new_history.errors])
@@ -39,6 +40,7 @@ def create(user_id, store_id):
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
 @jwt_required
 def update(user_id, store_id):
+
     store = Store.get_by_id(store_id)
     history = History.get_or_none(
         (History.user_id == user_id) & 
@@ -55,7 +57,8 @@ def update(user_id, store_id):
         return jsonify({
             "time_out":history.time_out,
             "user":history.user.name,
-            "store":history.store.name
+            "store":history.store.name,
+            "headcount":history.store.headcount
             })
     else:
         return jsonify([err for err in new_history.errors])
