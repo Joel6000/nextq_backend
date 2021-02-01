@@ -34,6 +34,10 @@ def update(user_id, store_id):
     print("before save")
     if history.save():
         print("after save")
-        return jsonify({"token":token})
+        return jsonify({
+            "time_out":history.time_out,
+            "user":history.user.name,
+            "store":history.store.name
+            })
     else:
         return jsonify([err for err in new_history.errors])
