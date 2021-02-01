@@ -25,17 +25,14 @@ def create(user_id, store_id):
         return jsonify([err for err in new_history.errors])
 
 
-@history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['PUT'])
+@history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
 def update(user_id, store_id):
     history = History.get_or_none((History.user_id == user_id) & (History.store_id == store_id) )
     history.time_out = datetime.datetime.now()
-
+    print("before save")
     if history.save():
-        token = create_access_token(identity = new_history.id) #somehting else here
-        return jsonify
-        ({
-            "token":token
-            "time_out":history.time_out
-            })
+        print("after save")
+        token = create_access_token(identity = history.id) #somehting else here
+        return jsonify({"token":token})
     else:
         return jsonify([err for err in new_history.errors])
