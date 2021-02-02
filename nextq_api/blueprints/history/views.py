@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import jwt_required #similar to login_required, a decorator to make sure that JWT token must be present for the function to be called
 from models.history import History
 from models.user import User
 from models.store import Store
@@ -10,14 +10,14 @@ history_api_blueprint = Blueprint('history_api',
                              template_folder='templates')
 
 
-@history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
+@history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
 def create(user_id, store_id):
-
+    #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
     user= User.get_or_none(User.id == user_id)
     store = Store.get_or_none(Store.id == store_id)
     history = History.select().where(History.user_id == user.id, History.time_out == None ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
 
-    if history.exists():
+    if history.exists(): #QUERY OF HISTORY EXISTS, RETURN ERROR.
         return jsonify({"error":"User is not checked out from previous store."})
     else:
         new_history = History(
@@ -36,8 +36,8 @@ def create(user_id, store_id):
         else:
             return jsonify([err for err in new_history.errors])
 
-
-@history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST'])
+#CHECKOUT FUNCTION, UPDATE HISTORY.TIME_OUT AND DECREASE STORE HEADCOUNT
+@history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST']) 
 @jwt_required
 def update(user_id, store_id):
 
@@ -45,10 +45,10 @@ def update(user_id, store_id):
     history = History.get_or_none(
         (History.user_id == user_id) & 
         (History.store_id == store_id) & 
-        (History.time_out == None)
+        (History.time_out == None) #QUERY WHERE USER AND TIME_OUT IS NONE TO MAKE SURE WE GET THE RIGHT HISTORY QUERY.
         )
 
-    history.time_out = datetime.datetime.now()
+    history.time_out = datetime.datetime.now() #UPDATE TIME_OUT
     print("before save")
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount

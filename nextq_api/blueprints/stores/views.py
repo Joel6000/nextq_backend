@@ -6,9 +6,9 @@ stores_api_blueprint = Blueprint('stores_api',
                              __name__,
                              template_folder='templates')
 
-#SHOP API DRAFT
+#STORE CREATE API
 @stores_api_blueprint.route('/new', methods=['POST'])
-def new_store():
+def create():
     params = request.json
     new_store = Store(
         name = params.get("name"),
