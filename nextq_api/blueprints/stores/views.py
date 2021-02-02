@@ -22,12 +22,15 @@ def new_store():
     else:
         return jsonify([err for err in new_store.errors])
 
-@stores_api_blueprint.route('/<store_id>/headcount', methods=['GET'])
-def get_headcount(store_id):
+@stores_api_blueprint.route('/<store_id>/', methods=['GET'])
+def get_store(store_id):
     store = Store.get_by_id(store_id)
 
     if store:
         return jsonify({
+            "name":store.name,
+            "location":store.location,
+            "customer_limit":store.customer_limit,
             "headcount":store.headcount
         })
     else:
