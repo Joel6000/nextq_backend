@@ -33,6 +33,7 @@ def create(user_id, store_id):
 
             if new_queue.save():
                 return jsonify({
+                    "type":"queue",
                     "user":new_queue.user.name,
                     "store":new_queue.store.name
                 })
@@ -51,6 +52,7 @@ def create(user_id, store_id):
 
             if new_queue.save():
                 return jsonify({
+                    "type":"queue",
                     "user":new_queue.user.name,
                     "store":new_queue.store.name
                 })
