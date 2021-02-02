@@ -61,6 +61,8 @@ def create(user_id, store_id):
 
     elif store.headcount < store.customer_limit and queue: #prevents walk in user to checkin when there is a virtual queue
         if queue:
+            queue.delete_instance()
+            
             new_history = History(
             user = user,
             store = store
