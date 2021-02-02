@@ -13,27 +13,33 @@ history_api_blueprint = Blueprint('history_api',
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
 def create(user_id, store_id):
+
     #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
     user= User.get_or_none(User.id == user_id)
     store = Store.get_or_none(Store.id == store_id)
-    history = History.select().where(History.user_id == user.id, History.time_out == None ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
+    history = History.get_or_none((History.user_id == user.id) & (History.time_out == None) ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
+    queue = Queue.get_or_none(Queue.user_id == user.id)
 
-    if store.headcount >= store.customer_limit:
-        new_queue = Queue(
-            user=user,
-            store=store
-        )
+    if store.headcount == store.customer_limit:
 
-        if new_queue.save():
-        return jsonify({
-                "user":new_queue.store,
-                "store":new_queue.store
-            })
+        if queue:
+            return jsonify({"error":"User already in queue."})
         else:
-            return jsonify([err for err in new_history.errors])
+            new_queue = Queue(
+                user=user,
+                store=store
+            )
+
+            if new_queue.save():
+                return jsonify({
+                    "user":new_queue.user.name,
+                    "store":new_queue.store.name
+                })
+            else:
+                return jsonify([err for err in new_history.errors])
     else:
         
-        if history.exists(): #QUERY OF HISTORY EXISTS, RETURN ERROR.
+        if history: #QUERY OF HISTORY EXISTS, RETURN ERROR.
             return jsonify({"error":"User is not checked out from previous store."})
         else:
             new_history = History(
