@@ -20,7 +20,8 @@ def login():
             return {
                 'token': access_token,
                 'name':user.name,
-                'mobile':user.mobile
+                'mobile':user.mobile,
+                'user_id':user.id
                 }
         else:
             return {'error': 'Email or password invalid'}
