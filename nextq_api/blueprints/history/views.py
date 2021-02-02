@@ -59,6 +59,24 @@ def create(user_id, store_id):
             else:
                 return jsonify([err for err in new_history.errors])
 
+    elif store.headcount < store.customer_limit and queue: #prevents walk in user to checkin when there is a virtual queue
+        if queue:
+            new_history = History(
+            user = user,
+            store = store
+            )
+
+            if new_history.save():
+                store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
+                store.save()
+                return jsonify({
+                    "user":new_history.user.name,
+                    "store":new_history.store.name,
+                    "headcount":new_history.store.headcount
+                    })
+            else:
+                return jsonify([err for err in new_history.errors])   
+
     else:
         
         if history: #QUERY OF HISTORY EXISTS, RETURN ERROR.
