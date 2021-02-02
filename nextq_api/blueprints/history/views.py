@@ -51,7 +51,7 @@ def update(user_id, store_id):
     history.time_out = datetime.datetime.now()
     print("before save")
     if history.save():
-        store.headcount = store.headcount - 1
+        store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
         print("after save")
         return jsonify({
