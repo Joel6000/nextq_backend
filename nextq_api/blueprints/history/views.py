@@ -19,6 +19,7 @@ def create(user_id, store_id):
     store = Store.get_or_none(Store.id == store_id)
     history = History.get_or_none((History.user_id == user.id) & (History.time_out == None) ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
     queue = Queue.get_or_none(Queue.user_id == user.id)
+    queue_exists = Queue.get_or_none(Queue.store_id == store.id)
 
     if store.headcount == store.customer_limit:
 
@@ -37,6 +38,21 @@ def create(user_id, store_id):
                 })
             else:
                 return jsonify([err for err in new_history.errors])
+    
+    elif store.headcount == store.customer_limit and queue_exists:
+        new_queue = Queue(
+            user=user,
+            store=store
+            )
+
+        if new_queue.save():
+            return jsonify({
+                "user":new_queue.user.name,
+                "store":new_queue.store.name
+            })
+        else:
+            return jsonify([err for err in new_history.errors])
+
     else:
         
         if history: #QUERY OF HISTORY EXISTS, RETURN ERROR.
@@ -64,7 +80,10 @@ def create(user_id, store_id):
 @jwt_required
 def update(user_id, store_id):
 
+    queue = Queue.get_or_none((Queue.user_id == user_id) & (Queue.store_id == store_id))
+
     store = Store.get_by_id(store_id)
+
     history = History.get_or_none(
         (History.user_id == user_id) & 
         (History.store_id == store_id) & 
@@ -72,11 +91,14 @@ def update(user_id, store_id):
         )
 
     history.time_out = datetime.datetime.now() #UPDATE TIME_OUT
-    print("before save")
+
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
-        print("after save")
+
+        if queue:
+            queue.delete_instance()
+        
         return jsonify({
             "time_out":history.time_out,
             "user":history.user.name,
@@ -85,3 +107,6 @@ def update(user_id, store_id):
             })
     else:
         return jsonify([err for err in new_history.errors])
+
+
+
