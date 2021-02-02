@@ -31,26 +31,28 @@ def create(user_id, store_id):
             })
         else:
             return jsonify([err for err in new_history.errors])
-  
-    if history.exists(): #QUERY OF HISTORY EXISTS, RETURN ERROR.
-        return jsonify({"error":"User is not checked out from previous store."})
     else:
-        new_history = History(
+        
+        if history.exists(): #QUERY OF HISTORY EXISTS, RETURN ERROR.
+            return jsonify({"error":"User is not checked out from previous store."})
+        else:
+            new_history = History(
             user = user,
             store = store
-        )
+            )
 
-        if new_history.save():
-            store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
-            store.save()
-            return jsonify({
-                "user":new_history.user.name,
-                "store":new_history.store.name,
-                "headcount":new_history.store.headcount
-                })
-        else:
-            return jsonify([err for err in new_history.errors])
-
+            if new_history.save():
+                store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
+                store.save()
+                return jsonify({
+                    "user":new_history.user.name,
+                    "store":new_history.store.name,
+                    "headcount":new_history.store.headcount
+                    })
+            else:
+                return jsonify([err for err in new_history.errors])
+  
+        
 #CHECKOUT FUNCTION, UPDATE HISTORY.TIME_OUT AND DECREASE STORE HEADCOUNT
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST']) 
 @jwt_required
