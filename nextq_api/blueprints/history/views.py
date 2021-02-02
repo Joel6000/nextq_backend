@@ -107,6 +107,3 @@ def update(user_id, store_id):
             })
     else:
         return jsonify([err for err in new_history.errors])
-
-
-
