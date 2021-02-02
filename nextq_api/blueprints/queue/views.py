@@ -13,26 +13,23 @@ queue_api_blueprint = Blueprint('queue_api',
 
 @queue_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
 def create(user_id, store_id):
+
     store = Store.get_by_id(store_id)
     user = User.get_by_id(user_id)
 
-    space_available = int(store.limit - shop.headcount)
-
-    if space_available < 0:
-        new_queue = Queue(
+    new_queue = Queue(
             user=user,
             store=store
         )
 
-        if new_queue.save():
-            return jsonify({
+    if new_queue.save():
+        return jsonify({
                 "user":new_queue.store,
                 "store":new_queue.store
             })
-        else:
-            return jsonify([err for err in new_history.errors])
     else:
-        return jsonify({"errors":"Space is available, queue function skipped."})
+        return jsonify([err for err in new_history.errors])
+  
 
 
 
@@ -42,3 +39,5 @@ def create(user_id, store_id):
 # def notify(space_available, query):
 #     for i in range(0:space_available):
 #         alert(query[i+5])
+
+#no physical queue, timer to boot out the queue if user doesn't checked in.

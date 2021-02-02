@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required #similar to login_required, a decora
 from models.history import History
 from models.user import User
 from models.store import Store
+from models.queue import Queue
 import datetime
 
 history_api_blueprint = Blueprint('history_api',
@@ -17,6 +18,20 @@ def create(user_id, store_id):
     store = Store.get_or_none(Store.id == store_id)
     history = History.select().where(History.user_id == user.id, History.time_out == None ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
 
+    if store.headcount >= store.customer_limit:
+        new_queue = Queue(
+            user=user,
+            store=store
+        )
+
+        if new_queue.save():
+        return jsonify({
+                "user":new_queue.store,
+                "store":new_queue.store
+            })
+        else:
+            return jsonify([err for err in new_history.errors])
+  
     if history.exists(): #QUERY OF HISTORY EXISTS, RETURN ERROR.
         return jsonify({"error":"User is not checked out from previous store."})
     else:
