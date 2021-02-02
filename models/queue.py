@@ -5,6 +5,6 @@ import datetime
 import peewee as pw
 
 class Queue(BaseModel):
-    user = pw.ForeignKeyField(User)
-    store = pw.ForeignKeyField(Store)
+    user = pw.ForeignKeyField(User,on_delete="CASCADE")
+    store = pw.ForeignKeyField(Store,on_delete="CASCADE")
     queue_time = pw.DateTimeField(default=datetime.datetime.now)
