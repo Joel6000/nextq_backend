@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, request, Response
-from flask_jwt_extended import jwt_required
 from models.user import User
 
 users_api_blueprint = Blueprint('users_api',

@@ -18,10 +18,12 @@ def create():
 
     if new_store.save():
         return jsonify({"storeName":new_store.name,
-        "storeLocation":new_store.location})
+                        "storeLocation":new_store.location
+                    })
     else:
         return jsonify([err for err in new_store.errors])
-
+        
+#GET STORE INFORMATION
 @stores_api_blueprint.route('/<store_id>/', methods=['GET'])
 def get_store(store_id):
     store = Store.get_by_id(store_id)
