@@ -21,7 +21,7 @@ def create(user_id, store_id):
     queue = Queue.get_or_none(Queue.user_id == user.id)
     queue_exists = Queue.get_or_none(Queue.store_id == store.id)
 
-    if store.headcount == store.customer_limit:
+    if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
             return jsonify({"error":"User already in queue."})
@@ -40,18 +40,22 @@ def create(user_id, store_id):
                 return jsonify([err for err in new_history.errors])
     
     elif store.headcount == store.customer_limit and queue_exists:
-        new_queue = Queue(
-            user=user,
-            store=store
-            )
 
-        if new_queue.save():
-            return jsonify({
-                "user":new_queue.user.name,
-                "store":new_queue.store.name
-            })
+        if queue:
+            return jsonify({"error":"User already in queue."})
         else:
-            return jsonify([err for err in new_history.errors])
+            new_queue = Queue(
+                user=user,
+                store=store
+                )
+
+            if new_queue.save():
+                return jsonify({
+                    "user":new_queue.user.name,
+                    "store":new_queue.store.name
+                })
+            else:
+                return jsonify([err for err in new_history.errors])
 
     else:
         
