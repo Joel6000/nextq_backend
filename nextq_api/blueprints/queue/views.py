@@ -11,24 +11,19 @@ queue_api_blueprint = Blueprint('queue_api',
                              template_folder='templates')
 
 
-@queue_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST'])
-def create(user_id, store_id):
+@queue_api_blueprint.route('/<user_id>/user/<store_id>/store/delete', methods=['POST'])
+def delete(user_id, store_id):
 
     store = Store.get_by_id(store_id)
     user = User.get_by_id(user_id)
 
-    new_queue = Queue(
-            user=user,
-            store=store
-        )
+    queue = Queue.get_or_none((Queue.user_id == user.id) & (Queue.store_id == store.id))
 
-    if new_queue.save():
+    if queue.delete_instance():
         return jsonify({
-                "user":new_queue.store,
-                "store":new_queue.store
-            })
+                "msg":"Successfully deleted queue"})
     else:
-        return jsonify([err for err in new_history.errors])
+        return jsonify([err for err in queue.errors])
   
 
 
