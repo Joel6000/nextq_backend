@@ -20,11 +20,12 @@ def create(user_id, store_id):
     history = History.get_or_none((History.user_id == user.id) & (History.time_out == None) ) #VALIDATION, IF USER NOT CHECKEDOUT, PREVENT NEW HISTORY
     queue = Queue.get_or_none(Queue.user_id == user.id)
     queue_exists = Queue.get_or_none(Queue.store_id == store.id)
+    store_space = int(store.customer_limit - store.headcount)
 
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
-            return jsonify({"error":"User already in queue."})
+            return jsonify({"error":"User already in queue."}) #KIV
         else:
             new_queue = Queue(
                 user=user,
@@ -39,31 +40,37 @@ def create(user_id, store_id):
                 })
             else:
                 return jsonify([err for err in new_history.errors])
+   
+    elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS A QUEUE, 
 
-    elif store.headcount < store.customer_limit and queue: #CHECK IF USER IS IN THE QUEUE AND THERE'S SPACE. (MUST ADD QUEUE NUMBER FOR THIS TO WORK ORDERLY)
-        if queue: #DELETE USER FROM QUEUE AND MOVE INTO HISTORY
-            queue.delete_instance()
+        if queue: #CHECK IF USER IN QUEUE AND QUEUE NUMBER REACHED. CHECK IN USER
+            queue_array =[]
+            store_queue = Queue.select().where(Queue.store_id == store.id).limit(4) #Change limit to store_space
+            for q in store_queue:
+                queue_array.append(q.user_id)
+         
+            if queue.user_id in queue_array:
+                print("hello")
+                queue.delete_instance()
 
-            new_history = History(
-            user = user,
-            store = store
-            )
+                new_history = History(
+                user = user,
+                store = store
+                )
 
-            if new_history.save():
-                store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
-                store.save()
-                return jsonify({
-                    "user":new_history.user.name,
-                    "store":new_history.store.name,
-                    "headcount":new_history.store.headcount
-                    })
+                if new_history.save():
+                    store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
+                    store.save()
+                    return jsonify({
+                        "user":new_history.user.name,
+                        "store":new_history.store.name,
+                        "headcount":new_history.store.headcount
+                        })
+                else:
+                    return jsonify([err for err in new_history.errors])
             else:
-                return jsonify([err for err in new_history.errors])
-    
-    elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS SPACE BUT A QUEUE EXISTS
+                return jsonify({"msg":"buy ice cream"})
 
-        if queue:
-            return jsonify({"error":"User already in queue."})
         else:
             new_queue = Queue(
                 user=user,
@@ -104,7 +111,7 @@ def create(user_id, store_id):
         
 #CHECKOUT FUNCTION, UPDATE HISTORY.TIME_OUT AND DECREASE STORE HEADCOUNT
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST']) 
-@jwt_required
+# @jwt_required
 def update(user_id, store_id):
 
     store = Store.get_by_id(store_id)
