@@ -49,9 +49,9 @@ def create(user_id, store_id):
             queue_array =[]
             store_queue = Queue.select().where(Queue.store_id == store.id).limit(store_space) #Change limit to store_space
             for q in store_queue:
-                queue_array.append(q.user_id)
+                queue_array.append(q.user_id) #add user_id into queue array
          
-            if queue.user_id in queue_array:
+            if queue.user_id in queue_array: 
                 queue.delete_instance()
 
                 new_history = History(
