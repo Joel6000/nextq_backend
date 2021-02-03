@@ -58,7 +58,7 @@ def create(user_id, store_id):
                     "headcount":new_history.store.headcount
                     })
             else:
-                return jsonify([err for err in new_history.errors])   
+                return jsonify([err for err in new_history.errors])
     
     elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS SPACE BUT A QUEUE EXISTS
 
@@ -107,8 +107,6 @@ def create(user_id, store_id):
 @jwt_required
 def update(user_id, store_id):
 
-    queue = Queue.get_or_none((Queue.user_id == user_id) & (Queue.store_id == store_id))
-
     store = Store.get_by_id(store_id)
 
     history = History.get_or_none(
@@ -122,9 +120,6 @@ def update(user_id, store_id):
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
-
-        if queue:
-            queue.delete_instance()
         
         return jsonify({
             "time_out":history.time_out,
