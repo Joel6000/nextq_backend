@@ -22,6 +22,7 @@ def create(user_id, store_id):
     queue_exists = Queue.get_or_none(Queue.store_id == store.id)
     store_space = int(store.customer_limit - store.headcount)
 
+    #STORE FULL
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
@@ -41,6 +42,7 @@ def create(user_id, store_id):
             else:
                 return jsonify([err for err in new_history.errors])
    
+   #SPACE AVAILABLE, QUEUE EXISTS.
     elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS A QUEUE, 
 
         if queue: #CHECK IF USER IN QUEUE AND QUEUE NUMBER REACHED. CHECK IN USER
