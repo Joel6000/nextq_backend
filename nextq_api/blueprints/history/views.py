@@ -25,7 +25,7 @@ def create(user_id, store_id):
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
-            return jsonify({"error":"User already in queue."}) #KIV
+            return jsonify({"error":"Shop is full."}) #KIV
         else:
             new_queue = Queue(
                 user=user,
@@ -45,12 +45,11 @@ def create(user_id, store_id):
 
         if queue: #CHECK IF USER IN QUEUE AND QUEUE NUMBER REACHED. CHECK IN USER
             queue_array =[]
-            store_queue = Queue.select().where(Queue.store_id == store.id).limit(4) #Change limit to store_space
+            store_queue = Queue.select().where(Queue.store_id == store.id).limit(store_space) #Change limit to store_space
             for q in store_queue:
                 queue_array.append(q.user_id)
          
             if queue.user_id in queue_array:
-                print("hello")
                 queue.delete_instance()
 
                 new_history = History(
