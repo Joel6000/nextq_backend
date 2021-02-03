@@ -40,8 +40,8 @@ def create(user_id, store_id):
             else:
                 return jsonify([err for err in new_history.errors])
 
-    elif store.headcount < store.customer_limit and queue: #prevents walk in user to checkin when there is a virtual queue
-        if queue:
+    elif store.headcount < store.customer_limit and queue: #CHECK IF USER IS IN THE QUEUE AND THERE'S SPACE. (MUST ADD QUEUE NUMBER FOR THIS TO WORK ORDERLY)
+        if queue: #DELETE USER FROM QUEUE AND MOVE INTO HISTORY
             queue.delete_instance()
 
             new_history = History(
@@ -60,7 +60,7 @@ def create(user_id, store_id):
             else:
                 return jsonify([err for err in new_history.errors])   
     
-    elif store.headcount < store.customer_limit and queue_exists: #prevents walk in user to checkin when there is a virtual queue
+    elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS SPACE BUT A QUEUE EXISTS
 
         if queue:
             return jsonify({"error":"User already in queue."})
