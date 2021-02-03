@@ -3,10 +3,12 @@ import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
 from flask_jwt_extended import JWTManager
 from database import db
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
 jwt = JWTManager(app)
+socketio = SocketIO(app)
 
 
 if os.getenv('FLASK_ENV') == 'production':
