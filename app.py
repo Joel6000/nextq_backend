@@ -3,13 +3,17 @@ import config
 from flask import Flask, flash, render_template, request, redirect, url_for, jsonify
 from flask_jwt_extended import JWTManager
 from database import db
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO,emit
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
 jwt = JWTManager(app)
 socketio = SocketIO(app)
 
+values = {
+    'slider1': 25,
+    'slider2': 0,
+}
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")
@@ -28,3 +32,13 @@ def after_request(response):
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
     return render_template('index.html')
+
+
+@socketio.on('connect')
+def test_connect():
+    emit('after connect', {'data':"let's dance"})
+
+@socketio.on('Slider value changed')
+def value_changed(message):
+    values[message['who']] = message['data']
+    emit('update value', message, broadcast=True)

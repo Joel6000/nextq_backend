@@ -1,21 +1,28 @@
-</head>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<body>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
- <div class="container">
-   {% block content %}
-   <h1>Testing Backend</h1>
-   {% endblock %}
- </div>
+    {% block header %}
  
-</body>
+    {% endblock %}
+
+    <title>
+      {% block title %}
+      {% endblock %}NEXTQ
+    </title>
+
+  </head>
+  <body>
+    <div>
+      {% block content %}
+      {% endblock %} 
+    </div>
+    <footer>
+      Made with &hearts; at <a target="_blank" href="https://www.nextacademy.com/?utm_source=github&utm_medium=student-challenge&utm_campaign=flask-nextagram">NEXT Academy</a>
+    </footer>
+  </body>
 </html>
+
+
