@@ -34,6 +34,8 @@ def create(user_id, store_id):
             )
 
             if new_queue.save():
+                store.queue = store.queue + 1
+                store.save()
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -60,7 +62,8 @@ def create(user_id, store_id):
                 )
 
                 if new_history.save():
-                    store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
+                    store.headcount += 1 #STORE HEADCOUNT +1
+                    store.queue -= 1
                     store.save()
                     return jsonify({
                         "user":new_history.user.name,
@@ -79,6 +82,8 @@ def create(user_id, store_id):
                 )
 
             if new_queue.save():
+                store.queue += 1
+                store.save()
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
