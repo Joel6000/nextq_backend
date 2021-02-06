@@ -4,18 +4,12 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script type="text/javascript" charset="UTF-8">
 
-    $(document).ready(function() {
-         
-        // sending a connect request to the server.
-        var socket = io.connect('http://localhost:5000');
+    let socket = io.connect('http://localhost:5000');
 
-        socket.on('after connect', function(msg) {
+    socket.on('after connect', function(msg) {
             console.log('After connect', msg);
-        });
-        
-
-        
     });
+
 </script>
 {% endblock %}
 {% block content %}

@@ -5,6 +5,7 @@ from models.user import User
 from models.store import Store
 from models.queue import Queue
 import datetime
+from app import socketio
 
 history_api_blueprint = Blueprint('history_api',
                              __name__,
@@ -149,7 +150,8 @@ def all_history(user_id):
 
     histories = History.select().where(History.user_id == user_id)
 
-    list_of_history = []
+    list_of_history = []        
+    socketio.emit('all_history')
     for history in histories:
         list_of_history.append(
         {
