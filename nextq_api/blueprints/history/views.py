@@ -37,6 +37,8 @@ def create(user_id, store_id):
             if new_queue.save():
                 store.queue = store.queue + 1
                 store.save()
+                socketio.emit('headcount_queue')
+
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -66,6 +68,8 @@ def create(user_id, store_id):
                     store.headcount += 1 #STORE HEADCOUNT +1
                     store.queue -= 1
                     store.save()
+                    socketio.emit('headcount_queue')
+
                     return jsonify({
                         "user":new_history.user.name,
                         "store":new_history.store.name,
@@ -85,6 +89,8 @@ def create(user_id, store_id):
             if new_queue.save():
                 store.queue += 1
                 store.save()
+                socketio.emit('headcount_queue')
+
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -107,6 +113,8 @@ def create(user_id, store_id):
             if new_history.save():
                 store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
                 store.save()
+                socketio.emit('headcount_queue')
+
                 return jsonify({
                     "user":new_history.user.name,
                     "store":new_history.store.name,
@@ -134,6 +142,8 @@ def update(user_id, store_id):
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
+        socketio.emit('headcount_queue')
+
         
         return jsonify({
             "time_out":history.time_out,
