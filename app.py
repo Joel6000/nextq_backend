@@ -30,7 +30,6 @@ def after_request(response):
 def index():
     return render_template('index.html')
 
-
 @socketio.on('message')
 def test_message():
     emit('afterClick', {'headcount':"hi"})
