@@ -31,11 +31,11 @@ def index():
     return render_template('index.html')
 
 
-@socketio.on('connect')
-def test_connect():
-    emit('after connect', {'headcount':"hi"})
+@socketio.on('message')
+def test_message():
+    emit('afterClick', {'headcount':"hi"})
 
-@socketio.on('store')
+@socketio.on('callStore')
 def test_store():
     from models.store import Store
     stores = Store.select()
@@ -50,3 +50,9 @@ def test_store():
             "queue":store.queue
         })
     emit('store', (list_of_stores))
+
+
+# From API (history, checkin) , emit (headcount_queue) from backend to frontend
+# socket.on(headcount_queue) emit callStore #from FE to BE
+# socket.on(callStore), run function, emit (store,msg) BE TO FE
+# socket.on(store), run function, console.log(msg) frontend shows message

@@ -151,7 +151,7 @@ def all_history(user_id):
     histories = History.select().where(History.user_id == user_id)
 
     list_of_history = []        
-    socketio.emit('all_history')
+    socketio.emit('headcount_queue')
     for history in histories:
         list_of_history.append(
         {
