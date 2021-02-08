@@ -15,11 +15,13 @@ def create():
         name = params.get("name"),
         location= params.get("location"),
         customer_limit= params.get("limit"),
+        image_url=params.get("image_url")
         )
 
     if new_store.save():
         return jsonify({"storeName":new_store.name,
-                        "storeLocation":new_store.location
+                        "storeLocation":new_store.location,
+                        "image_url":new_store.image_url
                     })
     else:
         return jsonify([err for err in new_store.errors])
