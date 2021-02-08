@@ -15,6 +15,7 @@ def create():
         name = params.get("name"),
         location= params.get("location"),
         customer_limit= params.get("limit"),
+        image_url=params.get("url_limit")
         )
 
     if new_store.save():
