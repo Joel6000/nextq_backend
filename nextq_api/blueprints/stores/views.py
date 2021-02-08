@@ -20,7 +20,8 @@ def create():
 
     if new_store.save():
         return jsonify({"storeName":new_store.name,
-                        "storeLocation":new_store.location
+                        "storeLocation":new_store.location,
+                        "image_url":new_store.image_url
                     })
     else:
         return jsonify([err for err in new_store.errors])
