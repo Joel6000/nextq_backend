@@ -30,6 +30,9 @@ def after_request(response):
 def index():
     return render_template('index.html')
 
+@socketio.on('message')
+def click():
+    emit('afterClick')
 
 #TESTING TARGETTED HEADCOUNT
 
