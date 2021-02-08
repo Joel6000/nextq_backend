@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from models.store import Store
+from app import socketio
 
 stores_api_blueprint = Blueprint('stores_api',
                              __name__,
@@ -27,13 +28,13 @@ def create():
 @stores_api_blueprint.route('/<store_id>/', methods=['GET'])
 def get_store(store_id):
     store = Store.get_by_id(store_id)
-
     if store:
         return jsonify({
             "name":store.name,
             "location":store.location,
             "customer_limit":store.customer_limit,
-            "headcount":store.headcount
+            "headcount":store.headcount,
+            "queue":store.queue
         })
     else:
         return jsonify([err for err in new_store.errors])

@@ -5,10 +5,26 @@ from models.user import User
 from models.store import Store
 from models.queue import Queue
 import datetime
+from app import socketio
 
 history_api_blueprint = Blueprint('history_api',
                              __name__,
                              template_folder='templates')
+
+
+def call_store():
+    stores = Store.select()
+    list_of_stores = []
+    for store in stores:
+        list_of_stores.append(
+        {
+            "name":store.name,
+            "location":store.location,
+            "customer_limit":store.customer_limit,
+            "headcount":store.headcount,
+            "queue":store.queue
+        })
+    socketio.emit('store', (list_of_stores))
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
@@ -22,6 +38,7 @@ def create(user_id, store_id):
     queue_exists = Queue.get_or_none(Queue.store_id == store.id)
     store_space = int(store.customer_limit - store.headcount)
 
+    #STORE FULL
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
@@ -33,6 +50,10 @@ def create(user_id, store_id):
             )
 
             if new_queue.save():
+                store.queue = store.queue + 1
+                store.save()
+                call_store()
+
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -41,15 +62,16 @@ def create(user_id, store_id):
             else:
                 return jsonify([err for err in new_history.errors])
    
+   #SPACE AVAILABLE, QUEUE EXISTS.
     elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS A QUEUE, 
 
         if queue: #CHECK IF USER IN QUEUE AND QUEUE NUMBER REACHED. CHECK IN USER
             queue_array =[]
             store_queue = Queue.select().where(Queue.store_id == store.id).limit(store_space) #Change limit to store_space
             for q in store_queue:
-                queue_array.append(q.user_id)
+                queue_array.append(q.user_id) #add user_id into queue array
          
-            if queue.user_id in queue_array:
+            if queue.user_id in queue_array: 
                 queue.delete_instance()
 
                 new_history = History(
@@ -58,8 +80,11 @@ def create(user_id, store_id):
                 )
 
                 if new_history.save():
-                    store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
+                    store.headcount += 1 #STORE HEADCOUNT +1
+                    store.queue -= 1
                     store.save()
+                    call_store()
+
                     return jsonify({
                         "user":new_history.user.name,
                         "store":new_history.store.name,
@@ -77,6 +102,9 @@ def create(user_id, store_id):
                 )
 
             if new_queue.save():
+                store.queue += 1
+                store.save()
+                call_store()
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -99,6 +127,7 @@ def create(user_id, store_id):
             if new_history.save():
                 store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
                 store.save()
+                call_store()
                 return jsonify({
                     "user":new_history.user.name,
                     "store":new_history.store.name,
@@ -126,6 +155,7 @@ def update(user_id, store_id):
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
+        call_store()
         
         return jsonify({
             "time_out":history.time_out,
@@ -135,3 +165,23 @@ def update(user_id, store_id):
             })
     else:
         return jsonify([err for err in new_history.errors])
+
+@history_api_blueprint.route('/<user_id>/user/all', methods=['GET']) 
+# @jwt_required
+def all_history(user_id):
+
+    histories = History.select().where(History.user_id == user_id)
+
+    list_of_history = []        
+    for history in histories:
+        list_of_history.append(
+        {
+            "name":history.store.name,
+            "location":history.store.location,
+            "time_in":history.time_in,
+            "time_out":history.time_out
+        })
+    return jsonify(list_of_history)
+
+
+        

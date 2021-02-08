@@ -1,7 +1,7 @@
 from app import app
 from flask_cors import CORS
 
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}}) # Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
+cors = CORS(app, resources={r"*": {"origins": "*"}}) # Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
 
 ## API Routes ##
 from nextq_api.blueprints.users.views import users_api_blueprint

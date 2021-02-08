@@ -1,0 +1,17 @@
+{% extends "_layout.html" %}
+{% block header %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js" integrity="sha512-oFOCo2/3DtjrJG4N27BjSLQWoiBv171sK6a+JiWjp/7agxC2nCUP358AqzxkBUb5jX8g6CYLPdSKQTbC0weCwA==" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="UTF-8">
+
+    let socket = io.connect('http://localhost:5000');
+
+    socket.on('after connect', function(msg) {
+            console.log('After connect', msg);
+    });
+
+</script>
+{% endblock %}
+{% block content %}
+<h1>Testing Backend</h1>
+{% endblock %}
