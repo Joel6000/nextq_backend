@@ -30,31 +30,14 @@ def after_request(response):
 def index():
     return render_template('index.html')
 
-@socketio.on('message')
-def test_message():
-    emit('afterClick', {'headcount':"hi"})
 
-@socketio.on('callStore')
-def get_all_store():
-    from models.store import Store
-    stores = Store.select()
-    list_of_stores = []
-    for store in stores:
-        list_of_stores.append(
-        {
-            "name":store.name,
-            "location":store.location,
-            "customer_limit":store.customer_limit,
-            "headcount":store.headcount,
-            "queue":store.queue
-        })
-    emit('store', (list_of_stores))
+#TESTING TARGETTED HEADCOUNT
 
-@socketio.on('targetHeadcount')
-def get_headcount(store_id):
-    from models.store import Store
-    store = Store.get_by_id(store_id)
-    emit('headcount',{"headcount":store.headcount})
+# @socketio.on('targetHeadcount')
+# def get_headcount(store_id):
+#     from models.store import Store
+#     store = Store.get_by_id(store_id)
+#     emit('headcount',{"headcount":store.headcount})
 
 # From API (history, checkin) , emit (headcount_queue) from backend to frontend
 # socket.on(headcount_queue) emit callStore #from FE to BE

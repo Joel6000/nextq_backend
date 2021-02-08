@@ -27,22 +27,14 @@ def create():
 #GET STORE INFORMATION
 @stores_api_blueprint.route('/<store_id>/', methods=['GET'])
 def get_store(store_id):
-    socketio.emit('get_headcount')
     store = Store.get_by_id(store_id)
-
     if store:
         return jsonify({
             "name":store.name,
             "location":store.location,
             "customer_limit":store.customer_limit,
-            "headcount":store.headcount
+            "headcount":store.headcount,
+            "queue":store.queue
         })
     else:
         return jsonify([err for err in new_store.errors])
-
-
-@stores_api_blueprint.route('/all', methods=['GET'])
-def all_store():
-    socketio.emit('headcount_queue')
-    return jsonify({"message":"data received through socket"})
-

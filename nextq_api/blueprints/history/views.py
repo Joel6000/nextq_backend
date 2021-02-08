@@ -12,6 +12,21 @@ history_api_blueprint = Blueprint('history_api',
                              template_folder='templates')
 
 
+def call_store():
+    stores = Store.select()
+    list_of_stores = []
+    for store in stores:
+        list_of_stores.append(
+        {
+            "name":store.name,
+            "location":store.location,
+            "customer_limit":store.customer_limit,
+            "headcount":store.headcount,
+            "queue":store.queue
+        })
+    socketio.emit('store', (list_of_stores))
+
+
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
 def create(user_id, store_id):
 
@@ -37,7 +52,7 @@ def create(user_id, store_id):
             if new_queue.save():
                 store.queue = store.queue + 1
                 store.save()
-                socketio.emit('headcount_queue')
+                call_store()
 
                 return jsonify({
                     "type":"queue",
@@ -68,7 +83,7 @@ def create(user_id, store_id):
                     store.headcount += 1 #STORE HEADCOUNT +1
                     store.queue -= 1
                     store.save()
-                    socketio.emit('headcount_queue')
+                    call_store()
 
                     return jsonify({
                         "user":new_history.user.name,
@@ -89,8 +104,7 @@ def create(user_id, store_id):
             if new_queue.save():
                 store.queue += 1
                 store.save()
-                socketio.emit('headcount_queue')
-
+                call_store()
                 return jsonify({
                     "type":"queue",
                     "user":new_queue.user.name,
@@ -113,8 +127,7 @@ def create(user_id, store_id):
             if new_history.save():
                 store.headcount = store.headcount + 1 #STORE HEADCOUNT +1
                 store.save()
-                socketio.emit('headcount_queue')
-
+                call_store()
                 return jsonify({
                     "user":new_history.user.name,
                     "store":new_history.store.name,
@@ -142,8 +155,7 @@ def update(user_id, store_id):
     if history.save():
         store.headcount = store.headcount - 1 #Reduce headcount
         store.save()
-        socketio.emit('headcount_queue')
-
+        call_store()
         
         return jsonify({
             "time_out":history.time_out,
@@ -161,7 +173,6 @@ def all_history(user_id):
     histories = History.select().where(History.user_id == user_id)
 
     list_of_history = []        
-    socketio.emit('headcount_queue')
     for history in histories:
         list_of_history.append(
         {
@@ -171,3 +182,6 @@ def all_history(user_id):
             "time_out":history.time_out
         })
     return jsonify(list_of_history)
+
+
+        
