@@ -8,13 +8,14 @@ Flask==1.1.2
 Flask-Cors==3.0.10
 Flask-JWT-Extended==3.25.0
 Flask-SocketIO==5.0.1
+gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 jmespath==0.10.0
 MarkupSafe==1.1.1
 peewee==3.14.0
-peewee-db-evolve==3.7.6
 psycopg2-binary==2.8.6
+peewee-db-evolve==3.7.6
 PyJWT==1.7.1
 python-dateutil==2.8.1
 python-dotenv==0.15.0
