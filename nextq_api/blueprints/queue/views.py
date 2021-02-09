@@ -26,13 +26,14 @@ def delete(user_id, store_id):
         return jsonify([err for err in queue.errors])
   
 
+@queue_api_blueprint.route("/<user_id>/", methods = ["GET"])
+def get_number(user_id):
+    queue = Queue.get_or_none(Queue.user_id == user_id)
+    queue_list = Queue.select().where(Queue.store_id == queue.store_id)
 
-
-# query = queue.select().where(shop.id = blabla) → [1, a, cbde, were, 2325, 6, 7, 8, 9, 10]
-# notify(space_available, query)
-
-# def notify(space_available, query):
-#     for i in range(0:space_available):
-#         alert(query[i+5])
-
-#no physical queue, timer to boot out the queue if user doesn't checked in.
+    queue_number = 0
+    for index, user_queue in enumerate(queue_list):
+        if user_queue.user_id == queue.user_id:
+            queue_number = index + 1
+        
+    return jsonify({"queue_number":queue_number})
