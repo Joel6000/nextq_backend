@@ -45,6 +45,7 @@ def delete(user_id, store_id):
     else:
         return jsonify([err for err in queue.errors])
 
+
 #GET QUEUE NUMBER
 @queue_api_blueprint.route("/<user_id>/", methods = ["GET"])
 def get_number(user_id):
@@ -55,11 +56,4 @@ def get_number(user_id):
     
     
     
-    
-    
-    
-    
-    
-    
-
 
