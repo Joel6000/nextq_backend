@@ -75,6 +75,7 @@ def create(user_id, store_id):
          
             if queue.user_id in queue_array: 
                 queue.delete_instance()
+                socketio.emit("queue_update", "queue has been updated")
 
                 new_history = History(
                 user = user,
@@ -96,7 +97,7 @@ def create(user_id, store_id):
                 else:
                     return jsonify([err for err in new_history.errors])
             else:
-                return jsonify({"msg":"buy ice cream"})
+                return jsonify({"msg":"Not your turn yet. Please come back later."})
 
         else:
             new_queue = Queue(
@@ -109,6 +110,7 @@ def create(user_id, store_id):
                 store.save()
                 call_store()
                 return jsonify({
+                    "id":new_queue.id,
                     "type":"queue",
                     "id":new_queue.id,
                     "user":new_queue.user.name,
@@ -178,10 +180,12 @@ def all_history(user_id):
 
     histories = History.select().where(History.user_id == user_id)
 
+    call_store()
+
     list_of_history = []        
     for history in histories:
         list_of_history.append(
-        { 
+        {
             "id":history.id,
             "name":history.store.name,
             "location":history.store.location,
