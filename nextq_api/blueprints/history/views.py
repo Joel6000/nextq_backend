@@ -18,7 +18,11 @@ def call_store():
     for store in stores:
         list_of_stores.append(
         {
+<<<<<<< HEAD
             "id": store.id,
+=======
+            "id":store.id,
+>>>>>>> ec507ae26c5bb9f5fd8ee5291d1299e58328ff46
             "name":store.name,
             "location":store.location,
             "customer_limit":store.customer_limit,
@@ -29,7 +33,11 @@ def call_store():
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
+<<<<<<< HEAD
 # @jwt_required
+=======
+@jwt_required
+>>>>>>> ec507ae26c5bb9f5fd8ee5291d1299e58328ff46
 def create(user_id, store_id):
 
     #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
@@ -112,6 +120,7 @@ def create(user_id, store_id):
                 return jsonify({
                     "id":new_queue.id,
                     "type":"queue",
+                    "id":new_queue.id,
                     "user":new_queue.user.name,
                     "store":new_queue.store.name
                 })
@@ -145,7 +154,7 @@ def create(user_id, store_id):
         
 #CHECKOUT FUNCTION, UPDATE HISTORY.TIME_OUT AND DECREASE STORE HEADCOUNT
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST']) 
-# @jwt_required
+@jwt_required
 def update(user_id, store_id):
 
     store = Store.get_by_id(store_id)
@@ -174,7 +183,7 @@ def update(user_id, store_id):
         return jsonify([err for err in new_history.errors])
 
 @history_api_blueprint.route('/<user_id>/user/all', methods=['GET']) 
-# @jwt_required
+@jwt_required
 def all_history(user_id):
 
     histories = History.select().where(History.user_id == user_id)
