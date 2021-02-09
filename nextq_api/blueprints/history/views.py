@@ -96,7 +96,7 @@ def create(user_id, store_id):
                 else:
                     return jsonify([err for err in new_history.errors])
             else:
-                return jsonify({"msg":"buy ice cream"})
+                return jsonify({"msg":"Not your turn yet. Please come back later."})
 
         else:
             new_queue = Queue(
