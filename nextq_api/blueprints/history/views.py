@@ -182,6 +182,7 @@ def all_history(user_id):
     for history in histories:
         list_of_history.append(
         {
+            "id":history.id,
             "name":history.store.name,
             "location":history.store.location,
             "time_in":history.time_in,
