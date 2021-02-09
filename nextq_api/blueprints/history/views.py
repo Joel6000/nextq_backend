@@ -75,7 +75,7 @@ def create(user_id, store_id):
          
             if queue.user_id in queue_array: 
                 queue.delete_instance()
-                socketio.emit("queue_update")
+                socketio.emit("queue_update", "queue has been updated")
 
                 new_history = History(
                 user = user,
