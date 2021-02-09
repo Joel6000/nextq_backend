@@ -58,7 +58,7 @@ def get_all_stores():
                 "headcount":store.headcount,
                 "queue":store.queue
             })
-            return jsonify(list_of_stores)
+        return jsonify(list_of_stores)
         
     else:
         return jsonify([err for err in new_store.errors])
