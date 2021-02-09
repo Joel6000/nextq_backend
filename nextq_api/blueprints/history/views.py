@@ -18,6 +18,7 @@ def call_store():
     for store in stores:
         list_of_stores.append(
         {
+            "id":store.id,
             "name":store.name,
             "location":store.location,
             "customer_limit":store.customer_limit,
@@ -87,6 +88,7 @@ def create(user_id, store_id):
                     call_store()
 
                     return jsonify({
+                        "id":new_history.id,
                         "user":new_history.user.name,
                         "store":new_history.store.name,
                         "headcount":new_history.store.headcount
@@ -108,6 +110,7 @@ def create(user_id, store_id):
                 call_store()
                 return jsonify({
                     "type":"queue",
+                    "id":new_queue.id,
                     "user":new_queue.user.name,
                     "store":new_queue.store.name
                 })
@@ -130,6 +133,7 @@ def create(user_id, store_id):
                 store.save()
                 call_store()
                 return jsonify({
+                    "id":new_history.id,
                     "user":new_history.user.name,
                     "store":new_history.store.name,
                     "headcount":new_history.store.headcount
@@ -159,6 +163,7 @@ def update(user_id, store_id):
         call_store()
         
         return jsonify({
+            "id":history.id,
             "time_out":history.time_out,
             "user":history.user.name,
             "store":history.store.name,
@@ -176,7 +181,8 @@ def all_history(user_id):
     list_of_history = []        
     for history in histories:
         list_of_history.append(
-        {
+        { 
+            "id":history.id,
             "name":history.store.name,
             "location":history.store.location,
             "time_in":history.time_in,

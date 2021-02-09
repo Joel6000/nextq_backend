@@ -40,3 +40,22 @@ def get_store(store_id):
         })
     else:
         return jsonify([err for err in new_store.errors])
+
+#GET ALL STORES
+@stores_api_blueprint.route('/all' , methods=["GET"])
+def get_all():
+    stores = Store.select()
+    if stores:
+        list_of_stores = []
+        for store in stores:
+            list_of_stores.append(
+            {
+                "name":store.name,
+                "location":store.location,
+                "customer_limit":store.customer_limit,
+                "headcount":store.headcount,
+                "queue":store.queue
+            })
+        return jsonify(list_of_stores)
+    else:
+        return jsonify([err for err in stores.errors])    
