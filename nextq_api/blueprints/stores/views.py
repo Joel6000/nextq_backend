@@ -50,6 +50,7 @@ def get_all():
         for store in stores:
             list_of_stores.append(
             {
+                "id":store.id,
                 "name":store.name,
                 "location":store.location,
                 "customer_limit":store.customer_limit,

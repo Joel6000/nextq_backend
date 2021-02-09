@@ -29,7 +29,3 @@ def after_request(response):
 @app.route("/") # Revisit decorators if you unclear of this syntax
 def index():
     return render_template('index.html')
-
-@socketio.on('message')
-def click():
-    emit('afterClick')
