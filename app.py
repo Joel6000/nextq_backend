@@ -30,6 +30,25 @@ def after_request(response):
 def index():
     return render_template('index.html')
 
+@socketio.on('get_queue_number')
+def get_queue(user_id):
+    queue = Queue.get_or_none(Queue.user_id == user_id)
+
+    if queue:
+        queue_list = Queue.select().where(Queue.store_id == queue.store_id)
+
+        if queue_list:
+            queue_number = 0
+            for index, user_queue in enumerate(queue_list):
+                if user_queue.user_id == queue.user_id:
+                    queue_number = index + 1
+            socketio.emit("queue_number", queue_number)
+        else:
+            return 0
+
+    else:
+        return 0 
+
 
 #TESTING TARGETTED HEADCOUNT
 
