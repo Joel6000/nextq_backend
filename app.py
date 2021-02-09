@@ -33,7 +33,7 @@ def index():
 @socketio.on('get_queue_number')
 def get_queue(user_id):
     queue = Queue.get_or_none(Queue.user_id == user_id)
-
+    socketio.emit("queue_number", queue_number) #kiv
     if queue:
         queue_list = Queue.select().where(Queue.store_id == queue.store_id)
 
