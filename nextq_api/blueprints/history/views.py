@@ -18,11 +18,7 @@ def call_store():
     for store in stores:
         list_of_stores.append(
         {
-<<<<<<< HEAD
-            "id": store.id,
-=======
             "id":store.id,
->>>>>>> ec507ae26c5bb9f5fd8ee5291d1299e58328ff46
             "name":store.name,
             "location":store.location,
             "customer_limit":store.customer_limit,
@@ -33,11 +29,7 @@ def call_store():
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
-<<<<<<< HEAD
-# @jwt_required
-=======
 @jwt_required
->>>>>>> ec507ae26c5bb9f5fd8ee5291d1299e58328ff46
 def create(user_id, store_id):
 
     #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
@@ -143,7 +135,7 @@ def create(user_id, store_id):
                 store.save()
                 call_store()
                 return jsonify({
-                    "id": new_history.id,
+                    "id":new_history.id,
                     "user":new_history.user.name,
                     "store":new_history.store.name,
                     "headcount":new_history.store.headcount

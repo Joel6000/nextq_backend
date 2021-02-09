@@ -55,11 +55,4 @@ def get_number(user_id):
     
     
     
-    
-    
-    
-    
-    
-    
-
 
