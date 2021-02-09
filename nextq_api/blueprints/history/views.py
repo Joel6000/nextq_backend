@@ -173,10 +173,12 @@ def update(user_id, store_id):
         return jsonify([err for err in new_history.errors])
 
 @history_api_blueprint.route('/<user_id>/user/all', methods=['GET']) 
-@jwt_required
+# @jwt_required
 def all_history(user_id):
 
     histories = History.select().where(History.user_id == user_id)
+
+    call_store()
 
     list_of_history = []        
     for history in histories:
