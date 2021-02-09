@@ -1,2 +1,2 @@
 release: python migrate.py
-web: gunicorn start:app --preload
+web: gunicorn --worker-class eventlet -w 1 start:app --preload
