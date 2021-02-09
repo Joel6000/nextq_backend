@@ -4,10 +4,13 @@ botocore==1.19.61
 certifi==2020.12.5
 click==7.1.2
 colorama==0.4.4
+dnspython==1.16.0
+eventlet==0.30.1
 Flask==1.1.2
 Flask-Cors==3.0.10
 Flask-JWT-Extended==3.25.0
 Flask-SocketIO==5.0.1
+greenlet==1.0.0
 gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
