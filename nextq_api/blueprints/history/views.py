@@ -29,7 +29,7 @@ def call_store():
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
-@jwt_required
+# @jwt_required
 def create(user_id, store_id):
 
     #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
