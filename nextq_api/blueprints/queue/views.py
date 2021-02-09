@@ -25,17 +25,24 @@ def delete(user_id, store_id):
     else:
         return jsonify([err for err in queue.errors])
 
-
+#GET QUEUE NUMBER
 @queue_api_blueprint.route("/<user_id>/", methods = ["GET"])
 def get_number(user_id):
     queue = Queue.get_or_none(Queue.user_id == user_id)
-    queue_list = Queue.select().where(Queue.store_id == queue.store_id)
 
-    queue_number = 0
-    for index, user_queue in enumerate(queue_list):
-        if user_queue.user_id == queue.user_id:
-            queue_number = index + 1
+    if queue:
+        queue_list = Queue.select().where(Queue.store_id == queue.store_id)
 
-    return jsonify({"queue_number":queue_number}) 
+        if queue_list:
+            queue_number = 0
+            for index, user_queue in enumerate(queue_list):
+                if user_queue.user_id == queue.user_id:
+                    queue_number = index + 1
+            return jsonify({"queue_number":queue_number}) 
+            
+        else:
+            return jsonify({"message": "No Queue."})
 
+    else:
+        return jsonify({"queue_number":0}) 
 
