@@ -23,12 +23,23 @@ def get_queue(user_id):
                 if user_queue.user_id == queue.user_id:
                     queue_number = index + 1
             return queue_number
-            
+
         else:
             return 0
 
     else:
         return 0 
+
+def get_space(user_id):
+    from models.store import Store
+    queue = Queue.get_or_none(Queue.user_id == user_id)
+    
+    if queue:
+        store = Store.get_by_id(queue.store_id)
+        space = store.customer_limit - store.headcount
+        return space
+    else:
+        return -1
 
 
 # Manually delete person from queue
@@ -45,11 +56,26 @@ def delete(user_id, store_id):
     else:
         return jsonify([err for err in queue.errors])
 
+
 #GET QUEUE NUMBER
 @queue_api_blueprint.route("/<user_id>/", methods = ["GET"])
 def get_number(user_id):
     queue_number = get_queue(user_id)
-    return jsonify(queue_number)
+    space_available = get_space(user_id)
+    
+    if queue_number == 0:
+        return jsonify({"error": "You are not in queue."})
+    elif queue_number <= space_available: 
+        return jsonify({
+            "queue_number": queue_number, 
+            "notification": "You can enter the store."
+            })
+    else:   #return notification
+        return jsonify({
+            "queue_number": queue_number, 
+            "notification": "Please wait to enter the store."
+            })
+
 
     
     
