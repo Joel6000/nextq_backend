@@ -47,28 +47,32 @@ def create(user_id, store_id):
         if queue:
             return jsonify({"error":"Shop is full. Please wait at somewhere comfortable."}) #KIV
         else:
-            new_queue = Queue(
-                user=user,
-                store=store
-            )
-
-            if new_queue.save():
-                store.queue = store.queue + 1
-                store.save()
-                call_store()
-
-                return jsonify({
-                    "type":"queue",
-                    "user":new_queue.user.name,
-                    "store":new_queue.store.name
-                })
+            if history:
+                return jsonify({"error": "You are already in the shop."})
             else:
-                return jsonify([err for err in new_history.errors])
-   
+                new_queue = Queue(
+                    user=user,
+                    store=store
+                )
+
+                if new_queue.save():
+                    store.queue = store.queue + 1
+                    store.save()
+                    call_store()
+
+                    return jsonify({
+                        "type":"queue",
+                        "user":new_queue.user.name,
+                        "store":new_queue.store.name
+                    })
+                else:
+                    return jsonify([err for err in new_history.errors])
+    
    #SPACE AVAILABLE, QUEUE EXISTS.
     elif store.headcount < store.customer_limit and queue_exists: #CHECKS IF THERE IS A QUEUE, 
 
         if queue: #CHECK IF USER IN QUEUE AND QUEUE NUMBER REACHED. CHECK IN USER
+            
             queue_array =[]
             store_queue = Queue.select().where(Queue.store_id == store.id).limit(store_space) #Change limit to store_space
             for q in store_queue:
@@ -101,24 +105,27 @@ def create(user_id, store_id):
                 return jsonify({"msg":"Not your turn yet. Please come back later."})
 
         else:
-            new_queue = Queue(
-                user=user,
-                store=store
-                )
-
-            if new_queue.save():
-                store.queue += 1
-                store.save()
-                call_store()
-                return jsonify({
-                    "id":new_queue.id,
-                    "type":"queue",
-                    "id":new_queue.id,
-                    "user":new_queue.user.name,
-                    "store":new_queue.store.name
-                })
+            if history:
+                return jsonify({"error": "You are already in the shop."})
             else:
-                return jsonify([err for err in new_history.errors])
+                new_queue = Queue(
+                    user=user,
+                    store=store
+                    )
+
+                if new_queue.save():
+                    store.queue += 1
+                    store.save()
+                    call_store()
+                    return jsonify({
+                        "id":new_queue.id,
+                        "type":"queue",
+                        "id":new_queue.id,
+                        "user":new_queue.user.name,
+                        "store":new_queue.store.name
+                    })
+                else:
+                    return jsonify([err for err in new_history.errors])
 
 
     else:
