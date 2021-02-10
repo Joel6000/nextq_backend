@@ -49,4 +49,3 @@ def get_queue(user_id):
     else:
         return 0 
 
-=======

@@ -41,7 +41,6 @@ def get_store(store_id):
     else:
         return jsonify([err for err in new_store.errors])
 
-
 #GET ALL STORE INFORMATION
 @stores_api_blueprint.route('/all', methods=['GET'])
 def get_all_stores():
@@ -57,11 +56,10 @@ def get_all_stores():
                 "location":store.location,
                 "customer_limit":store.customer_limit,
                 "headcount":store.headcount,
-                "queue":store.queue
+                "queue":store.queue,
+                "image_url":store.image_url
             })
         return jsonify(list_of_stores)
         
     else:
         return jsonify([err for err in new_store.errors])
-
-

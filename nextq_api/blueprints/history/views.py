@@ -23,13 +23,14 @@ def call_store():
             "location":store.location,
             "customer_limit":store.customer_limit,
             "headcount":store.headcount,
-            "queue":store.queue
+            "queue":store.queue,
+            "image_url":store.image_url
         })
     socketio.emit('store', (list_of_stores))
 
 
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store', methods=['POST']) #TAKE IN  USER_ID AND STORE_ID TO STORE FOREIGN KEYS ONTO THE NEW HISTORY ENTRY.
-@jwt_required
+# @jwt_required
 def create(user_id, store_id):
 
     #GET USER AND STORE FIRST BEFORE PASSING TO NEW_HISTORY.
@@ -44,7 +45,7 @@ def create(user_id, store_id):
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
-            return jsonify({"error":"Shop is full."}) #KIV
+            return jsonify({"error":"Shop is full. Please wait at somewhere comfortable."}) #KIV
         else:
             new_queue = Queue(
                 user=user,
@@ -75,7 +76,7 @@ def create(user_id, store_id):
          
             if queue.user_id in queue_array: 
                 queue.delete_instance()
-                socketio.emit("queue_update", "queue has been updated")
+                socketio.emit('queue_update', "queue has been updated")
 
                 new_history = History(
                 user = user,
@@ -146,7 +147,7 @@ def create(user_id, store_id):
         
 #CHECKOUT FUNCTION, UPDATE HISTORY.TIME_OUT AND DECREASE STORE HEADCOUNT
 @history_api_blueprint.route('/<user_id>/user/<store_id>/store/update', methods=['POST']) 
-@jwt_required
+# @jwt_required
 def update(user_id, store_id):
 
     store = Store.get_by_id(store_id)
@@ -175,7 +176,7 @@ def update(user_id, store_id):
         return jsonify([err for err in new_history.errors])
 
 @history_api_blueprint.route('/<user_id>/user/all', methods=['GET']) 
-@jwt_required
+# @jwt_required
 def all_history(user_id):
 
     histories = History.select().where(History.user_id == user_id)
