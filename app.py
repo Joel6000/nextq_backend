@@ -49,16 +49,3 @@ def get_queue(user_id):
     else:
         return 0 
 
-
-#TESTING TARGETTED HEADCOUNT
-
-# @socketio.on('targetHeadcount')
-# def get_headcount(store_id):
-#     from models.store import Store
-#     store = Store.get_by_id(store_id)
-#     emit('headcount',{"headcount":store.headcount})
-
-# From API (history, checkin) , emit (headcount_queue) from backend to frontend
-# socket.on(headcount_queue) emit callStore #from FE to BE
-# socket.on(callStore), run function, emit (store,msg) BE TO FE
-# socket.on(store), run function, console.log(msg) frontend shows message
