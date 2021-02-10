@@ -23,7 +23,8 @@ def call_store():
             "location":store.location,
             "customer_limit":store.customer_limit,
             "headcount":store.headcount,
-            "queue":store.queue
+            "queue":store.queue,
+            "image_url":store.image_url
         })
     socketio.emit('store', (list_of_stores))
 
@@ -44,7 +45,7 @@ def create(user_id, store_id):
     if store.headcount == store.customer_limit: #checks if store limit is reached
 
         if queue:
-            return jsonify({"error":"Shop is full."}) #KIV
+            return jsonify({"error":"Shop is full. Please wait at somewhere comfortable."}) #KIV
         else:
             new_queue = Queue(
                 user=user,

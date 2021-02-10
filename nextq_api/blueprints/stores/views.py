@@ -56,7 +56,8 @@ def get_all_stores():
                 "location":store.location,
                 "customer_limit":store.customer_limit,
                 "headcount":store.headcount,
-                "queue":store.queue
+                "queue":store.queue,
+                "image_url":store.image_url
             })
         return jsonify(list_of_stores)
         

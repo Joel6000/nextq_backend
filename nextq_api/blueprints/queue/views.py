@@ -31,7 +31,7 @@ def get_queue(user_id):
         return 0 
 
 
-
+# Manually delete person from queue
 @queue_api_blueprint.route('/<user_id>/user/<store_id>/store/delete', methods=['POST'])
 def delete(user_id, store_id):
 
