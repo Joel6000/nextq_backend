@@ -52,6 +52,8 @@ def delete(user_id, store_id):
     queue = Queue.get_or_none((Queue.user_id == user.id) & (Queue.store_id == store.id))
 
     if queue.delete_instance():
+        store.queue -= 1
+        store.save()
         return jsonify({"msg":"Successfully deleted queue"})
     else:
         return jsonify([err for err in queue.errors])
